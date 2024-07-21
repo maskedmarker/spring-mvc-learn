@@ -10,8 +10,9 @@
     <packaging>pom</packaging>
     <description>学习spring-mvc的基本特性</description>
     <modules>
-        <module>ch01-spring-web</module>
-        <module>ch02-sse</module>
+        <module>ch01-hello-war</module>
+        <module>ch02-hello-mvc</module>
+        <module>ch03-multi-dispatcher</module>
     </modules>
 
     <properties>

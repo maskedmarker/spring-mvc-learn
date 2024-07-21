@@ -24,3 +24,9 @@ hello.war
 2.war:war会将webapp目录的内容copy到war包中
 
 
+## servlet API的核心概念
+
+###
+
+## todo
+1.为什么抛异常和主动设置500,没有渲染error.html
