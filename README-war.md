@@ -12,7 +12,7 @@ hello.war
     |_index.html(或者index.jsp)
 
 注意:
-1.一定要有index文件,用来作为welcome-page,因为有些用户只输入htt://www.xxx.com,后面不带具体的path,此时welcom-page就有用处了.
+1.一定要有index文件,用来作为welcome-page,因为有些用户只输入htt://www.xxx.com,后面不带具体的path,此时welcome-page就有用处了.
 2.需要保护的资源需要放到WEB-INF目录下面;对于静态资源可以放到根目录下面(即WEB-INF目录外面)
 
 
@@ -21,7 +21,10 @@ hello.war
 其中:
 0.war包的名称以finalName为准
 1.war:war自动生成标准所需的META-INF和WEB-INF目录
-2.war:war会将webapp目录的内容copy到war包中
+2.war:war会将webapp目录(即warSourceDirectory)的内容copy到war包的根目录
+3.默认情况下,对于webapp目录下的空文件夹,是不会被copy的,只能通过添加无用的展位文件来完成.
+4.既是通过配置maven-resources-plugin/maven-war-plugin也不行无法copy空文件夹.
+5.如果不嫌麻烦,可以通过maven-assembly-plugin来完成.
 
 
 ## servlet API的核心概念
