@@ -13,6 +13,8 @@
         <module>ch01-hello-war</module>
         <module>ch02-hello-mvc</module>
         <module>ch03-multi-dispatcher</module>
+        <module>ch05-context-class</module>
+        <module>ch04-root-web-context</module>
     </modules>
 
     <properties>
