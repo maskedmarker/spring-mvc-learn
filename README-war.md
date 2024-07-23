@@ -22,9 +22,15 @@ hello.war
 0.war包的名称以finalName为准
 1.war:war自动生成标准所需的META-INF和WEB-INF目录
 2.war:war会将webapp目录(即warSourceDirectory)的内容copy到war包的根目录
-3.默认情况下,对于webapp目录下的空文件夹,是不会被copy的,只能通过添加无用的展位文件来完成.
-4.既是通过配置maven-resources-plugin/maven-war-plugin也不行无法copy空文件夹.
-5.如果不嫌麻烦,可以通过maven-assembly-plugin来完成.
+2.1.默认情况下,对于webapp目录下的空文件夹,是不会被copy的,只能通过添加无用的展位文件来完成.
+2.2.即使通过配置maven-resources-plugin/maven-war-plugin也不行无法copy空文件夹.
+2.3.如果不嫌麻烦,可以通过maven-assembly-plugin来完成.
+3.src/main/resources目录下的文件会被copy到war/WEB-INF/classes下面
+4.src/main/java目录下的类的class文件会被copy到war/WEB-INF/classes下面
+5.项目依赖的jar包会被copy到war/WEB-INF/lib下面
+
+可以通过debug模式,查看必要的输出信息获取maven工作的整个过程.
+idea用户可以通过右键package,调用debug模式.
 
 
 ## servlet API的核心概念
