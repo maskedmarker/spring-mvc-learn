@@ -1,0 +1,16 @@
+<project name="CopyWarTask" default="copy-war-file-to-tomcat" basedir=".">
+
+    <property name="my.var1" value="aaaaaaaaaaaaaaaaa" />
+
+    <target name="copy-war-file-to-tomcat">
+        <echo message="___find properties start___" />
+        <echo message="my.var1=${my.var1}" />
+        <echo message="___find properties end ___" />
+
+        <echo message="Starting copy of war file..." />
+        <copy todir="${tomcat.webapp.dir}">
+            <fileset dir="${maven.build.directory}" includes="${war.fileName}"/>
+        </copy>
+        <echo message="Copy of war file completed." />
+    </target>
+</project>

@@ -35,50 +35,34 @@
     <build>
         <finalName>hellowar</finalName>
         <plugins>
-<!--            <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
-                        <phase>process-resources</phase>
+                        <id>copy-war-file-to-tomcat</id>
+                        <phase>install</phase>
                         <goals>
-                            <goal>resources</goal>
+                            <goal>run</goal>
                         </goals>
                         <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/webapp</directory>
-                                    <includes>
-                                        <include>**/*</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/*.java</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                            <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                            <target>
+                                <!-- 设置 Maven 变量为 Ant 属性 -->
+                                <property name="maven.basedir" value="${project.basedir}" />
+                                <property name="maven.build.directory" value="${project.build.directory}" />
+                                <property name="war.fileName" value="${project.build.finalName}.war" />
+                                <property name="tomcat.webapp.dir" value="E:\server\apache-tomcat-9.0.89\webapps" />
+
+                                <echo message="___ Running Ant task... ___" />
+                                <!--可以使用下面的copy命令,这里使用独立的文件是为了展示ant插件更多的功能-->
+                                <!--<copy file="src/main/resources/my-file.txt" tofile="target/my-directory/my-file.txt" />-->
+                                <ant antfile="${project.basedir}/ant.xml" target="copy-war-file-to-tomcat" />
+                            </target>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                    <webResources>
-                        <resource>
-                            &lt;!&ndash; 确保包含空文件夹 &ndash;&gt;
-                            <directory>src/main/webapp</directory>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                        </resource>
-                    </webResources>
-                </configuration>
-            </plugin>-->
         </plugins>
     </build>
 </project>
