@@ -9,6 +9,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
+        <!--root-web-context支持一个context使用多个配置文件-->
         <param-value>/WEB-INF/spring/common-context.xml</param-value>
     </context-param>
     <listener>
@@ -49,6 +50,7 @@
         <init-param>
             <!--spring-mvc container, location default to servletName-servlet.xml-->
             <param-name>contextConfigLocation</param-name>
+            <!--dispatcher-web-context也支持一个context使用多个配置文件-->
             <param-value>/WEB-INF/spring/dispatcher-context.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
