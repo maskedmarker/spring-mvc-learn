@@ -14,6 +14,11 @@ root WebApplicationContext需用通过ContextLoaderListener在servletContext初�
 该WebApplicationContext是全局唯一的.
 FrameworkServlet的web WebApplicationContext的父容器就是该root WebApplicationContext.这样通过层级关系,方便FrameworkServlet无感地使用基础服务.
 
+### contextConfigLocation
+web/root WebApplicationContext默认情况下都是XmlWebApplicationContext,即ConfigurableWebApplicationContext子类.
+ConfigurableWebApplicationContext支持一个context由多个配置文件来完成配置过程.即多个配置文件生成一个context
+
+
 注意:
 1.当在web.xml中配置多个DispatcherServlet时,需要通过url的prefix来做路由.
 2.此时prefix肯定不是空字符串,此时请求的pathInfo在剔除prefix后的值才是待映射到的RequestMapping.
