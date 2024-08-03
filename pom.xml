@@ -16,6 +16,7 @@
         <module>ch04-root-web-context</module>
         <module>ch05-parent-root-web-context</module>
         <module>ch06-context-class</module>
+        <module>ch00-commons</module>
     </modules>
 
     <properties>

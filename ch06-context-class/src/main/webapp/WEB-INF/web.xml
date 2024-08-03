@@ -1,9 +1,24 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          metadata-complete="true">
-    <display-name>war</display-name>
+
+    <display-name>context class</display-name>
+
+    <!--指定root web context的实现类-->
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.example.learn.web.spring.spring.MyXmlWebApplicationContext</param-value>
+    </context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <!--root-web-context支持一个context使用多个配置文件-->
+        <param-value>/WEB-INF/spring/root-context.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.example.learn.web.spring.spring.MyContextLoaderListener</listener-class>
+    </listener>
 
     <!-- charset encoding -->
     <filter>
@@ -30,7 +45,7 @@
         <init-param>
             <!--spring-mvc container, location default to servletName-servlet.xml-->
             <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/spring/dispatcher-servlet.xml</param-value>
+            <param-value>/WEB-INF/spring/dispatcher-context.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

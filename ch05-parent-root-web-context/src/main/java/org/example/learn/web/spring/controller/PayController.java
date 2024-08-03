@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequestMapping("/paySystem")
 public class PayController {
 
     @Autowired
@@ -22,7 +23,7 @@ public class PayController {
 
     @RequestMapping("/pay")
     @ResponseBody
-    public PayResultDto hello(@ModelAttribute PayRequestDto payRequestDto) {
+    public PayResultDto pay(@ModelAttribute PayRequestDto payRequestDto) {
         PayResultDto payResultDto = payService.pay(payRequestDto);
 
         // 支付完成后,需要通知遗留系统
