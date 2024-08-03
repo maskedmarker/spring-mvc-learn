@@ -19,7 +19,7 @@ web/root WebApplicationContext默认情况下都是XmlWebApplicationContext,即C
 ConfigurableWebApplicationContext支持一个context由多个配置文件来完成配置过程.即多个配置文件生成一个context
 
 ### contextClass
-默认请情况下,web/root WebApplicationContext使用的都是XmlWebApplicationContext子类.用户也可以通过contextClass指定同时指定相同的子类.
+默认请情况下,web/root WebApplicationContext使用的都是XmlWebApplicationContext子类.用户也可以通过context-param/init-param分别单独指定子类.
 子类必须是ConfigurableWebApplicationContext
 
 
