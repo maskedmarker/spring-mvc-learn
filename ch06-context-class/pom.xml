@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ch05-context-class</artifactId>
+    <artifactId>ch06-context-class</artifactId>
     <packaging>war</packaging>
 
     <properties>
