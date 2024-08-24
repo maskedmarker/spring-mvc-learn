@@ -2,23 +2,29 @@
 
 ## 核心概念
 
-#### FrameworkServlet可以拥有独立的web WebApplicationContext
+### FrameworkServlet可以拥有独立的web WebApplicationContext
 FrameworkServlet作为框架的基础类,集成了一个WebApplicationContext,该WebApplicationContext为FrameworkServlet提供了spring ApplicationContext各种便利的功能.
 该WebApplicationContext可以是用户以构造器入参或以servletContext的属性的形式提供给FrameworkServlet.但WebApplicationContext必须已经初始化完成了;
 当用户不主动提供时,FrameworkServlet就通过servlet的init-param-contextConfigLocation信息为自己构造并初始化一个WebApplicationContext;
 所以,servlet container中可以有多个FrameworkServlet;这些个FrameworkServlet可以独占(用户不指定)或公用(用户指定)WebApplicationContext.
 
-#### 多个FrameworkServlet拥有共同的提供基础服务的root WebApplicationContext
+### 多个FrameworkServlet拥有共同的提供基础服务的root WebApplicationContext
 上面FrameworkServlet拥有的是web层面的WebApplicationContext,主要用于处理web请求/响应;还有一些基础性的服务需要放置在全局层面的容器里,比如:业务逻辑/数据库/中间件等.
 root WebApplicationContext需用通过ContextLoaderListener在servletContext初始化的时候通过context-param的contextConfigLocation来获取用户配置信息,创建并初始化一个WebApplicationContext;
 该WebApplicationContext是全局唯一的.
 FrameworkServlet的web WebApplicationContext的父容器就是该root WebApplicationContext.这样通过层级关系,方便FrameworkServlet无感地使用基础服务.
 
-### contextConfigLocation
+### parent of root WebApplicationContext
+通过ContextLoaderListener为root WebApplicationContext指定一个父容器.
+该容器是ApplicationContext(并没有要求必须是WebApplicationContext).
+该容器目的是为了legacy系统准备的.
+
+
+#### contextConfigLocation
 web/root WebApplicationContext默认情况下都是XmlWebApplicationContext,即ConfigurableWebApplicationContext子类.
 ConfigurableWebApplicationContext支持一个context由多个配置文件来完成配置过程.即多个配置文件生成一个context
 
-### contextClass
+#### contextClass
 默认请情况下,web/root WebApplicationContext使用的都是XmlWebApplicationContext子类.用户也可以通过context-param/init-param分别单独指定子类.
 子类必须是ConfigurableWebApplicationContext
 
