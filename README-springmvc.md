@@ -47,20 +47,33 @@ org.springframework.web.servlet.DispatcherServlet.getHandler
 
 ## todo
 1. DispatcherServlet所需的web薄层的类,都以属性的形式存在,并非放在WebApplicationContext容器中.(注意!!!!!)
+2. DispatcherServlet中变量mappedHandler(类型是HandlerExecutionChain)的名字太误导人了.老老实实用handlerExecutionChain比较好.
 
 
+## DispatcherServlet
+1.DispatcherServlet所需的web薄层的类,都以属性的形式存在,并非放在WebApplicationContext容器中.(注意!!!!!)
+2.DispatcherServlet中变量mappedHandler(类型是HandlerExecutionChain)的名字太误导人了.老老实实用handlerExecutionChain比较好.
+3.HandlerExecutionChain包含了本次请求所需的HandlerMethod和HandlerInterceptor.
+4.由DispatcherServlet先调用HandlerExecutionChain.applyPreHandle
+5.然后由HandlerAdapter.handle(HandlerExecutionChain.getHandler())来执行controller方法
+6.最后由DispatcherServlet先调用HandlerExecutionChain.applyPostHandle
+7.其中,HandlerAdapter.handle返回值为null时,意味着请求的响应已经处理好.所以HandlerAdapter必要时需要具备将对象序列化为json字符串,这也是为什么RequestMappingHandlerAdapter包含HttpMessageConverter(用于将对象转换为http响应)
 
-## HttpMessageConverter(用于将对象转换为http响应)
+## @EnableWebMvc
+通过注解@EnableWebMvc启动webMvc的方式.该注解会为mvc提供必要的基础类.
+主要的具体工作由WebMvcConfigurationSupport来完成.
 
+具体的工作原理如下面的代码片段
 @Import(DelegatingWebMvcConfiguration.class)
-public @interface EnableWebMvc {
-
+public @interface EnableWebMvc
 @Configuration(proxyBeanMethods = false)
-public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
+public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport
 
-org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#requestMappingHandlerAdapter
+其中WebMvcConfigurationSupport提供了如下类:
+1.RequestMappingHandlerMapping(基于请求uri找到对应的HandlerMethod,然后与对应的HandlerInterceptor构建出HandlerExecutionChain)
+2.RequestMappingHandlerAdapter(内置以及基于classpath生成必要的HttpMessageConverter)
+public BeanNameUrlHandlerMapping beanNameHandlerMapping() {
+3.还有其他必须的类(比如:SimpleControllerHandlerAdapter/SimpleUrlHandlerMapping/BeanNameUrlHandlerMapping/FormattingConversionService/...)
 
-RequestMappingHandlerAdapter adapter = createRequestMappingHandlerAdapter();
 
-org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#addDefaultHttpMessageConverters # 基于classpath是否有对应的类添加各种HttpMessageConverter
 
