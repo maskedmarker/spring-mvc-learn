@@ -46,3 +46,21 @@ org.springframework.web.servlet.DispatcherServlet.getHandler
 
 
 ## todo
+1. DispatcherServlet所需的web薄层的类,都以属性的形式存在,并非放在WebApplicationContext容器中.(注意!!!!!)
+
+
+
+## HttpMessageConverter(用于将对象转换为http响应)
+
+@Import(DelegatingWebMvcConfiguration.class)
+public @interface EnableWebMvc {
+
+@Configuration(proxyBeanMethods = false)
+public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
+
+org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#requestMappingHandlerAdapter
+
+RequestMappingHandlerAdapter adapter = createRequestMappingHandlerAdapter();
+
+org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#addDefaultHttpMessageConverters # 基于classpath是否有对应的类添加各种HttpMessageConverter
+
