@@ -19,6 +19,10 @@ FrameworkServlet的web WebApplicationContext的父容器就是该root WebApplica
 该容器是ApplicationContext(并没有要求必须是WebApplicationContext).
 该容器目的是为了legacy系统准备的.
 
+### springmvc中各个ApplicationContext的功能定位
+web WebApplicationContext主要为DispatcherServlet服务的,该容器被称为dispatcher WebApplicationContext更贴切.主要用于将用户请求派发到特定的处理器.该容器更多是为用户和server之间提供薄薄的胶水层,不宜赋予过多的功能.
+root WebApplicationContext主要为前面的胶水层提供更"后端"的支持功能.
+parent of root WebApplicationContext主要接入legacy系统提供便利.
 
 #### contextConfigLocation
 web/root WebApplicationContext默认情况下都是XmlWebApplicationContext,即ConfigurableWebApplicationContext子类.
