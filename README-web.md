@@ -72,7 +72,16 @@ DispatcherServlet初始化与普通的使用方式不同,并不是等待spring�
 
 
 
-#### HandlerExecutionChain
+#### HandlerMapping
+Return a handler and any interceptors for this request. The choice may be made on request URL, session state, or any factor the implementing class chooses.
+
+#### HandlerAdapter
+Interface that must be implemented for each handler type to handle a request. 
+This interface is used to allow the DispatcherServlet to be indefinitely extensible. 
+The DispatcherServlet accesses all installed handlers through this interface, meaning that it does not contain code specific to any handler type.
+
+
+##### HandlerExecutionChain
 1. DispatcherServlet.doDispatch方法中的变量mappedHandler(类型是HandlerExecutionChain)的名字太误导人了.老老实实用handlerExecutionChain比较好.
 2. HandlerExecutionChain包含了本次请求所需的HandlerMethod和HandlerInterceptor.
 3. 由DispatcherServlet先调用HandlerExecutionChain.applyPreHandle
@@ -81,8 +90,56 @@ DispatcherServlet初始化与普通的使用方式不同,并不是等待spring�
 6. 其中,HandlerAdapter.handle返回值为null时,意味着请求的响应已经处理好.所以HandlerAdapter必要时需要具备将对象序列化为json字符串,这也是为什么RequestMappingHandlerAdapter包含HttpMessageConverter(用于将对象转换为http响应)
 
 
+##### RequestMappingHandlerMapping
+RequestMappingHandlerMapping在初始化阶段会遍历spring容器,基于@RequestMapping注解收集的metadata.在请求到来时,生成合适的HandlerExecutionChain用来处理请求.
 
+RequestMappingHandlerMapping在初始化时,从容器收集metadata数据.见如下源码:
+```java
+class AbstractHandlerMethodMapping {
+   public void afterPropertiesSet() {
+      initHandlerMethods();
+   }
+    // ...
+    protected void initHandlerMethods() {
+        // 所有类型都是candidate
+        String[] beanNames = (this.detectHandlerMethodsInAncestorContexts ?
+                BeanFactoryUtils.beanNamesForTypeIncludingAncestors(obtainApplicationContext(), Object.class) :
+                obtainApplicationContext().getBeanNamesForType(Object.class));
+        // 基于beanName逐个遍历
+        for (String beanName : beanNames) {
+            if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
+                Class<?> beanType = obtainApplicationContext().getType(beanName);
+                if (beanType != null && isHandler(beanType)) {
+                    detectHandlerMethods(beanName);
+                }
+            }
+        }
+        handlerMethodsInitialized(getHandlerMethods());
+    }
 
+   protected void detectHandlerMethods(final Object handler) {
+      Class<?> handlerType = (handler instanceof String ? obtainApplicationContext().getType((String) handler) : handler.getClass());
+      if (handlerType != null) {
+         // ...
+         methods.forEach((method, mapping) -> {
+             // 在注册时,用的时controller的beanName
+            registerHandlerMethod(handler, invocableMethod, mapping);
+         });
+      }
+   }
+}
+
+class AbstractHandlerMethodMapping {
+    // ...
+   protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
+      String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);
+      this.mappingRegistry.acquireReadLock();
+      HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);
+      // createWithResolvedBean会从spring容器中基于beanName获取对象
+      return (handlerMethod != null ? handlerMethod.createWithResolvedBean() : null);
+   }
+}
+```
 
 ##### 同时存在多个DispatcherServlet
 servlet容器中是可以有多个FrameworkServlet,即在web.xml中配置多个DispatcherServlet.
@@ -118,6 +175,9 @@ public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {}
 2. RequestMappingHandlerAdapter(内置以及基于classpath生成必要的HttpMessageConverter)  
     public BeanNameUrlHandlerMapping beanNameHandlerMapping() {}
 3. 还有其他必须的类(比如:SimpleControllerHandlerAdapter/SimpleUrlHandlerMapping/BeanNameUrlHandlerMapping/FormattingConversionService/...)
+
+
+
 
 
 
