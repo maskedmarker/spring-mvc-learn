@@ -188,3 +188,10 @@ public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {}
 Simple extension of HttpServlet which treats its config parameters (init-param entries within the servlet tag in web.xml) as bean properties.
 
 
+
+
+注意:
+1. 如果controller被同时添加@Controller和@Async时.
+   - RequestMappingHandlerMapping正常收集metadata时,HandlerMethod.beanType是proxy类
+   - RequestMappingHandlerMapping在处理请求时,HandlerMethod.bean是proxy实例
+   - aop作用发生在spring容器生成bean时,就已经是proxy类实例了.
