@@ -19,6 +19,9 @@
     <servlet>
         <servlet-name>helloWorld</servlet-name>
         <servlet-class>org.example.learn.web.servlet.HelloWorldServlet</servlet-class>
+        <!-- ????0?,servlet??????????servlet,?????????? -->
+        <!-- ??: javax.servlet.ServletRegistration.Dynamic.setLoadOnStartup-->
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>helloWorld</servlet-name>
